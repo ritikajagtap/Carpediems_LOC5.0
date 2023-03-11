@@ -18,7 +18,7 @@ const Register = () => {
         repeat_password: "",
         phone: "",
         address: address,
-        bussiness_name: "",
+        business_name: "",
     });
 
     const onChange = (event) => {
@@ -27,7 +27,7 @@ const Register = () => {
 
     const addressChange = (event) => {
         setaddress({ ...address, [event.target.name]: event.target.value });
-        creds.address = address;
+        setCreds({ ...creds, address: { ...address, [event.target.name]: event.target.value }});
     }
 
     let navigate = useNavigate();
@@ -36,22 +36,17 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (creds.password === creds.repeat_password) {
-            delete creds.repeat_password;
-            const json = await axios({
-                method: 'post',
-                url: `${host}/api/auth/signup`,
-                data: creds
-            })
-            .then((resposne) => {
-                localStorage.setItem('token', resposne.token);
-                navigate('/dashboard');
-            })
-            .catch((err) => {
-                console.log(err);
-                navigate('/register');
-            });
-        }
+        const json = await axios({
+            method: 'post',
+            url: `${host}/api/auth/signup`,
+            data: creds
+        })
+        .then((response) => {
+            localStorage.setItem('token', response.data.token);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
     }
  
     return (
@@ -73,7 +68,7 @@ const Register = () => {
                     />
                 </div>
                 <div className="m-auto md:m-10 md:p-10 md:w-1/2">
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div className="relative z-0 w-full mb-6 group">
                             <input
                                 type="text"
@@ -85,7 +80,7 @@ const Register = () => {
                                 required
                             />
                             <label
-                                for="name"
+                                htmlFor="name"
                                 className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                             >
                                 Name
@@ -102,7 +97,7 @@ const Register = () => {
                                 required
                             />
                             <label
-                                for="email"
+                                htmlFor="email"
                                 className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                             >
                                 Email address
@@ -120,7 +115,7 @@ const Register = () => {
                                     required
                                 />
                                 <label
-                                    for="password"
+                                    htmlFor="password"
                                     className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                                 >
                                     Password
@@ -137,7 +132,7 @@ const Register = () => {
                                     required
                                 />
                                 <label
-                                    for="repeat_password"
+                                    htmlFor="repeat_password"
                                     className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                                 >
                                     Confirm password
@@ -148,7 +143,6 @@ const Register = () => {
                             <div className="relative z-0 w-full mb-6 group">
                                 <input
                                     type="tel"
-                                    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                                     name="phone"
                                     onChange={onChange}
                                     id="phone"
@@ -157,7 +151,7 @@ const Register = () => {
                                     required
                                 />
                                 <label
-                                    for="phone"
+                                    htmlFor="phone"
                                     className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                                 >
                                     Phone number
@@ -166,15 +160,15 @@ const Register = () => {
                             <div className="relative z-0 w-full mb-6 group">
                                 <input
                                     type="text"
-                                    name="bussiness_name"
+                                    name="business_name"
                                     onChange={onChange}
-                                    id="bussiness_name"
+                                    id="business_name"
                                     className="block py-2.5 px-0 w-full text-sm text-gray-400 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                     placeholder=" "
                                     required
                                 />
                                 <label
-                                    for="bussiness_name"
+                                    htmlFor="business_name"
                                     className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                                 >
                                     Bussiness name
@@ -193,7 +187,7 @@ const Register = () => {
                                     required
                                 />
                                 <label
-                                    for="country"
+                                    htmlFor="country"
                                     className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                                 >
                                     Country
@@ -210,7 +204,7 @@ const Register = () => {
                                     required
                                 />
                                 <label
-                                    for="state"
+                                    htmlFor="state"
                                     className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                                 >
                                     State
@@ -227,7 +221,7 @@ const Register = () => {
                                     required
                                 />
                                 <label
-                                    for="city"
+                                    htmlFor="city"
                                     className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                                 >
                                     City
@@ -245,7 +239,7 @@ const Register = () => {
                                 required
                             />
                             <label
-                                for="street"
+                                htmlFor="street"
                                 className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                             >
                                 Street Address
@@ -258,7 +252,6 @@ const Register = () => {
                         </div> */}
                         <button
                             type="submit"
-                            onSubmit={handleSubmit}
                             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         >
                             Submit
