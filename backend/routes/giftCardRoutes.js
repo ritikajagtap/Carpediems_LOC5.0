@@ -7,6 +7,9 @@ const fetchUser = require(`${__dirname}/../middlewares/fetchUser`);
 const router = express.Router();
 
 router.post('/creategiftcard', fetchUser, giftCardController.createGiftCard);
+router.get('/viewallgiftcards', fetchUser, giftCardController.viewallgiftcards);
+router.delete('/deletegiftcardbyname/:giftcardname', fetchUser, giftCardController.deleteGiftCardbyname);
+router.delete('/deletegiftcardbycode/:code', fetchUser, giftCardController.deleteGiftCardByCode);
 
 
 module.exports = router;
