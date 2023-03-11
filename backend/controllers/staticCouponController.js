@@ -4,7 +4,7 @@ const GiftCard = require(`${__dirname}/../models/GiftCardModel`);
 const voucher_codes = require('voucher-code-generator');
 
 // POST createstaticcoupon/ :- Creating a static coupon for particular merchant (merchant should be logged in)
-exports.createstaticcoupon = async (req, res) => {
+exports.createStaticCoupon = async (req, res) => {
     try {
         const { name, usage_limit, threshhold, expiration, discount_value, discount_percent } = req.body;
         if (!name) {
@@ -18,17 +18,23 @@ exports.createstaticcoupon = async (req, res) => {
                 .status(400)
                 .json({ message: "Enter a valid ammount!" });
         }
-        if (!expiration || expiration > Date.now) {
+        // const date = new Date(date1.getFullYear(), date1.getMonth(), date1.getDate());
+        const today = new Date();
+        const userDate = new Date(Date.parse(expiration));
+
+      
+        if (!expiration || userDate < today) {
             return res
                 .status(400)
                 .json({ message: "Enter a valid expiration date!" });
         }
-        if (!threshhold || threshhold > 0) {
+        // console.log(threshhold);
+        if (!threshhold || threshhold <= 0) {
             return res
                 .status(400)
                 .json({ message: "Enter a valid threshold ammount!" });
         }
-        if (!discount_percent || !discount_value) {
+        if (!discount_percent && !discount_value) {
             return res
                 .status(400)
                 .json({ message: "Enter either discount percent or discount value!" });
@@ -67,3 +73,25 @@ exports.createstaticcoupon = async (req, res) => {
         res.status(500).send("Internal server error");
     }
 }
+
+// GET valid coupons 
+exports.validStaticCoupons = async (req, res) => {
+    try {
+        const date = new Date;
+        // const validStaticCoupons = await StaticCoupon.find({ merchantId: req.user.id }, { expiration: { $lt: date } });
+        const validStaticCoupons = await StaticCoupon.find({ merchantId: req.user.id, expiration: { $gt: date } });
+
+        // console.log(validStaticCoupons);
+        res.status(200).json({
+            status: 'success',
+            length: validStaticCoupons.length,
+            data: {
+                validStaticCoupons: validStaticCoupons
+            }
+        });
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Internal server error");
+    }
+} 

@@ -8,6 +8,7 @@ const router = express.Router();
 
 router.post('/creategiftcard', fetchUser, giftCardController.createGiftCard);
 router.get('/viewallgiftcards', fetchUser, giftCardController.viewallgiftcards);
+router.get('/viewvalidgiftcards', fetchUser, giftCardController.viewValidGiftCards);
 router.delete('/deletegiftcardbyname/:giftcardname', fetchUser, giftCardController.deleteGiftCardbyname);
 router.delete('/deletegiftcardbycode/:code', fetchUser, giftCardController.deleteGiftCardByCode);
 

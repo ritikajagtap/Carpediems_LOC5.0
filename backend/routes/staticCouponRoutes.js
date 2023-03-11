@@ -7,7 +7,8 @@ const fetchUser = require(`${__dirname}/../middlewares/fetchUser`);
 
 const router = express.Router();
 
-router.post('/createstaticcoupon', fetchUser, staticCouponController.createstaticcoupon);
+router.post('/createstaticcoupon', fetchUser, staticCouponController.createStaticCoupon);
+router.get('/validstaticcoupons', fetchUser, staticCouponController.validStaticCoupons);
 
 
 module.exports = router;

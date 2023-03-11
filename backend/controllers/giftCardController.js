@@ -21,7 +21,10 @@ exports.createGiftCard = async (req, res) => {
                 .status(400)
                 .json({ message: "Enter a valid ammount!" });
         }
-        if(!expiration || expiration>Date.now){
+        const today = new Date();
+        const userDate = new Date(Date.parse(expiration));
+
+        if(!expiration || userDate<today){
             return res
                 .status(400)
                 .json({ message: "Enter a valid expiration date!" });
@@ -47,6 +50,27 @@ exports.createGiftCard = async (req, res) => {
             data: {
                 obj,
             },
+        });
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Internal server error");
+    }
+}
+
+// GET /viewValidGiftCards
+exports.viewValidGiftCards = async (req, res) => {
+    try {
+        const date = new Date;
+        const viewValidGiftCards = await GiftCard.find({ merchantId: req.user.id, expiration: { $gt: date } });
+
+        // console.log(validStaticCoupons);
+        res.status(200).json({
+            status: 'success',
+            length: viewValidGiftCards.length,
+            data: {
+                viewValidGiftCards: viewValidGiftCards
+            }
         });
 
     } catch (error) {
@@ -96,7 +120,6 @@ exports.deleteGiftCardByCode = async (req, res) => {
         }
         // console.log(giftCards.length)
         const giftCardDel = await GiftCard.findOneAndDelete({code: code}, {merchantId: req.user.id});
-        
         res.status(200).json({
             status: 'success',
             
