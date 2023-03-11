@@ -4,7 +4,7 @@ const DynamicCoupon = require(`${__dirname}/../models/DynamicCouponModel`);
 const GiftCard = require(`${__dirname}/../models/GiftCardModel`);
 const voucher_codes = require('voucher-code-generator');
 
-// POST createdynamiccoupon/ :- Creating a static coupon for particular merchant (merchant should be logged in)
+// POST createdynamiccoupon/ :- Creating a dynamic coupon for particular merchant (merchant should be logged in)
 exports.createDynamicCoupon = async (req, res) => {
     try {
         const { name, count, threshhold, expiration, discount_value, discount_percent } = req.body;
