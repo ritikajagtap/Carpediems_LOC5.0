@@ -30,7 +30,6 @@ exports.createGiftCard = async (req, res) => {
             length: 8,
             count: count
         });
-        console.log(code[0]);
         const obj = [];
         for (let i = 0; i < count; i++) {
 
@@ -56,15 +55,76 @@ exports.createGiftCard = async (req, res) => {
     }
 }
 
-// DELETE /deletegiftcard/:giftcardname
-exports.deleteGiftCard = async (req, res) => {
+// GET /viewallgiftcards
+exports.viewallgiftcards = async (req, res) => {
     try {
+        const code = req.params.code;
+        // console.log(name);
+        const giftCards = await GiftCard.find({merchantId: req.user.id});
+        console.log(giftCards)
+        if(giftCards.length ===0){
+            return res
+                .status(400)
+                .json({ message: "GiftCard not found!" });
+        }
         
         res.status(200).json({
             status: 'success',
+            length: giftCards.length,
             data: {
+                giftCards: giftCards
+            }
+        });
 
-            },
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Internal server error");
+    }
+}
+
+// DELETE /deletegiftcardbycode/:code
+exports.deleteGiftCardByCode = async (req, res) => {
+    try {
+        const code = req.params.code;
+        // console.log(name);
+        const giftCard = await GiftCard.find({code: code});
+        // console.log(giftCard)
+        if(giftCard.length===0){
+            return res
+                .status(400)
+                .json({ message: "GiftCard not found!" });
+        }
+        // console.log(giftCards.length)
+        const giftCardDel = await GiftCard.findOneAndDelete({code: code}, {merchantId: req.user.id});
+        
+        res.status(200).json({
+            status: 'success',
+            
+        });
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Internal server error");
+    }
+}
+
+// DELETE /deletegiftcardbyname/:giftcardname
+exports.deleteGiftCardbyname = async (req, res) => {
+    try {
+        const name = req.params.giftcardname;
+        // console.log(name);
+        const giftCards = await GiftCard.find({name: name}, {merchantId: req.user.id});
+        if(giftCards.length===0){
+            return res
+                .status(400)
+                .json({ message: "GiftCards not found!" });
+        }
+        // console.log(giftCards.length)
+        const giftCard = await GiftCard.deleteMany({name: name}, {merchantId: req.user.id});
+        // console.log(giftCard);
+        res.status(200).json({
+            status: 'success',
+            
         });
 
     } catch (error) {

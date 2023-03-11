@@ -5,6 +5,7 @@ const cors = require('cors');
 const authRouter = require(`${__dirname}/routes/authRoutes`);
 const merchantRoutes = require(`${__dirname}/routes/merchantRoutes`);
 const giftCardRoutes = require(`${__dirname}/routes/giftCardRoutes`);
+const staticCouponRoutes = require(`${__dirname}/routes/staticCouponRoutes`);
 
 connectToMongo();
 const app = express();
@@ -17,7 +18,8 @@ console.log(date);
 //Authentication routes
 app.use('/api/auth', authRouter);
 app.use('/api/merchants', merchantRoutes)
-app.use('/api/coupons', giftCardRoutes)
+app.use('/api/giftcards', giftCardRoutes)
+app.use('/api/staticCoupons', staticCouponRoutes)
 
 
 app.listen(port, ()=> {
