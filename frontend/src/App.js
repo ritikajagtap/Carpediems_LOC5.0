@@ -6,6 +6,8 @@ import Homepage from "./components/home/Homepage";
 import MerchantPortal from "./components/auth/MerchantPortal";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
+import Dashboard from "./components/merchant/Dashboard";
+import Giftcard from "./components/merchant/Giftcard";
 
 function App() {
     return (
@@ -18,6 +20,8 @@ function App() {
                 <Route exact path="/merchant-portal" element={<MerchantPortal />}></Route>
                 <Route exact path="/register" element={<Register />}></Route>
                 <Route exact path="/login" element={<Login />}></Route>
+                {localStorage.getItem('token')} && <Route exact path="/dashboard" element={<Dashboard />}></Route>
+                {localStorage.getItem('token')} && <Route exact path="/giftcard" element={<Giftcard />}></Route>
               </Routes>
                 </div>
               <Footer />
