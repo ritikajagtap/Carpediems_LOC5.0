@@ -1,5 +1,23 @@
 const Merchant = require(`${__dirname}/../models/MerchantModel`);
 
+//GET Merchant /getmerchant
+exports.getMerchant = async (req, res) => {
+    try {
+        const merchant = await Merchant.findById(req.user.id).select('-password');
+        
+        res.status(200).json({
+            status: 'success',
+            data: {
+                merchant,
+            },
+        });
+
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal server error");
+    }
+}
+
 // GET /merchants : Retrieve a list of all merchants (login required)
 exports.getAllMercahnts = async (req, res) => {
     try {
@@ -20,28 +38,28 @@ exports.getAllMercahnts = async (req, res) => {
     }
 }
 
-// GET /merchants/:id : Retrieve a specific merchant by id (login required)
-exports.getMerchant = async (req, res) => {
-    try {
-        const merchant = await Merchant.findById(req.params.id);
-        if (!merchant) {
-            res.status(404).send("Merchant not found");
-        }
-        //SEND RESPONSE
-        res.status(200).json({
-            status: 'success',
-            results: 1,
-            data: {
-                merchant,
-            },
-        });
+// // GET /merchants/:id : Retrieve a specific merchant by id (login required)
+// exports.getMerchant = async (req, res) => {
+//     try {
+//         const merchant = await Merchant.findById(req.params.id);
+//         if (!merchant) {
+//             res.status(404).send("Merchant not found");
+//         }
+//         //SEND RESPONSE
+//         res.status(200).json({
+//             status: 'success',
+//             results: 1,
+//             data: {
+//                 merchant,
+//             },
+//         });
 
 
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).send("Internal server error");
-    }
-}
+//     } catch (error) {
+//         console.log(error.message);
+//         res.status(500).send("Internal server error");
+//     }
+// }
 
 // PUT /merchants/:id : Update a specific merchant by id (login required)
 exports.updateMe = async (req, res) => {
@@ -107,6 +125,8 @@ exports.deleteMerchant = async (req, res) => {
         res.status(500).send("Internal server error");
     }
 }
+
+
 
 // View Coupons 
 
