@@ -82,7 +82,6 @@ exports.viewValidGiftCards = async (req, res) => {
 // GET /viewallgiftcards
 exports.viewallgiftcards = async (req, res) => {
     try {
-        const code = req.params.code;
         // console.log(name);
         const giftCards = await GiftCard.find({merchantId: req.user.id});
         console.log(giftCards)

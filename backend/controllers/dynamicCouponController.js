@@ -1,28 +1,24 @@
 const Merchant = require(`${__dirname}/../models/MerchantModel`);
 const StaticCoupon = require(`${__dirname}/../models/StaticCouponModel`);
+const DynamicCoupon = require(`${__dirname}/../models/DynamicCouponModel`);
 const GiftCard = require(`${__dirname}/../models/GiftCardModel`);
 const voucher_codes = require('voucher-code-generator');
 
-// POST createstaticcoupon/ :- Creating a static coupon for particular merchant (merchant should be logged in)
-exports.createStaticCoupon = async (req, res) => {
+// POST createdynamiccoupon/ :- Creating a static coupon for particular merchant (merchant should be logged in)
+exports.createDynamicCoupon = async (req, res) => {
     try {
-        const { name, usage_limit, threshhold, expiration, discount_value, discount_percent } = req.body;
+        const { name, count, threshhold, expiration, discount_value, discount_percent } = req.body;
         if (!name) {
             return res
                 .status(400)
                 .json({ message: "Please enter the name of the coupon!" });
         }
-
-        if (!usage_limit || usage_limit <= 0) {
-            return res
-                .status(400)
-                .json({ message: "Enter a valid ammount!" });
-        }
+        
         // const date = new Date(date1.getFullYear(), date1.getMonth(), date1.getDate());
         const today = new Date();
         const userDate = new Date(Date.parse(expiration));
 
-      
+
         if (!expiration || userDate < today) {
             return res
                 .status(400)
@@ -47,25 +43,29 @@ exports.createStaticCoupon = async (req, res) => {
 
         const code = voucher_codes.generate({
             length: 10,
-            count: 1
+            count: count
         });
+        const obj = [];
+        for (let i = 0; i < count; i++) {
+            const newObj = await DynamicCoupon.create({
+                merchantId: req.user.id,
+                name: req.body.name,
+                code: code[i],
+                threshhold: threshhold,
+                discount_percent: discount_percent,
+                discount_value: discount_value,
+                expiration: expiration
+            });
+            obj.push(newObj);
+        }
 
-        const newObj = await StaticCoupon.create({
-            merchantId: req.user.id,
-            name: req.body.name,
-            code: code[0],
-            threshhold: threshhold,
-            usage_limit: usage_limit,
-            discount_percent: discount_percent,
-            discount_value: discount_value,
-            expiration: expiration
-        });
 
         res.status(200).json({
             status: 'success',
             data: {
-                newObj,
-            },
+                result: obj
+            }
+
         });
 
     } catch (error) {
@@ -74,19 +74,20 @@ exports.createStaticCoupon = async (req, res) => {
     }
 }
 
+
 // GET valid coupons 
-exports.validStaticCoupons = async (req, res) => {
+exports.validDynamicCoupons = async (req, res) => {
     try {
         const date = new Date;
         // const validStaticCoupons = await StaticCoupon.find({ merchantId: req.user.id }, { expiration: { $lt: date } });
-        const validStaticCoupons = await StaticCoupon.find({ merchantId: req.user.id, expiration: { $gt: date } });
+        const validDynamicCoupons = await DynamicCoupon.find({ merchantId: req.user.id, expiration: { $gt: date } });
 
         // console.log(validStaticCoupons);
         res.status(200).json({
             status: 'success',
-            length: validStaticCoupons.length,
+            length: validDynamicCoupons.length,
             data: {
-                validStaticCoupons: validStaticCoupons
+                validDynamicCoupons: validDynamicCoupons
             }
         });
 
@@ -96,23 +97,23 @@ exports.validStaticCoupons = async (req, res) => {
     }
 } 
 
-// GET /viewallstaticcoupons/
-exports.viewallStaticCoupons = async (req, res) => {
+// GET /viewalldynamiccoupons/
+exports.viewallDynamicCoupons = async (req, res) => {
     try {
         // console.log(name);
-        const viewallStaticCoupons = await StaticCoupon.find({merchantId: req.user.id});
-        console.log(viewallStaticCoupons)
-        if(viewallStaticCoupons.length ===0){
+        const viewallDynamicCoupons = await DynamicCoupon.find({merchantId: req.user.id});
+        console.log(viewallDynamicCoupons)
+        if(viewallDynamicCoupons.length ===0){
             return res
                 .status(400)
-                .json({ message: "GiftCard not found!" });
+                .json({ message: "Dynamic Coupons not found!" });
         }
         
         res.status(200).json({
             status: 'success',
-            length: viewallStaticCoupons.length,
+            length: viewallDynamicCoupons.length,
             data: {
-                viewallStaticCoupons: viewallStaticCoupons
+                viewallDynamicCoupons: viewallDynamicCoupons
             }
         });
 
@@ -122,20 +123,20 @@ exports.viewallStaticCoupons = async (req, res) => {
     }
 }
 
-// DELETE /deletestaticcouponbycode/:code
-exports.deleteStaticCouponsByCode = async (req, res) => {
+// DELETE /deletedynamiccouponbycode/:code
+exports.deleteDynamicCouponByCode = async (req, res) => {
     try {
         const code = req.params.code;
         // console.log(name);
-        const staticCoupon = await StaticCoupon.find({code: code});
+        const dynamicCoupon = await DynamicCoupon.find({code: code});
         // console.log(giftCard)
-        if(staticCoupon.length===0){
+        if(dynamicCoupon.length===0){
             return res
                 .status(400)
-                .json({ message: "StaticCoupon not found!" });
+                .json({ message: "dynamicCoupon not found!" });
         }
         // console.log(giftCards.length)
-        const StaticCouponDel = await StaticCoupon.findOneAndDelete({code: code}, {merchantId: req.user.id});
+        const dynamicCouponDel = await DynamicCoupon.findOneAndDelete({code: code}, {merchantId: req.user.id});
         res.status(200).json({
             status: 'success',
             
