@@ -1,4 +1,4 @@
-const Post = require(`${__dirname}/../models/MerchantModel`);
+const Merchant = require(`${__dirname}/../models/MerchantModel`);
 
 // GET /merchants : Retrieve a list of all merchants (login required)
 exports.getAllMercahnts = async (req, res) => {
@@ -107,3 +107,9 @@ exports.deleteMerchant = async (req, res) => {
         res.status(500).send("Internal server error");
     }
 }
+
+// View Coupons 
+
+// Coupons in use
+
+// inactive coupons
