@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.edit-img {
+    -webkit-filter: invert(1);
+    filter: invert(1);
+}

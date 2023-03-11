@@ -7,7 +7,8 @@ import MerchantPortal from "./components/auth/MerchantPortal";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Dashboard from "./components/merchant/Dashboard";
-import Giftcard from "./components/merchant/Giftcard";
+import Giftcards from "./components/merchant/GiftCards";
+import CreateGiftCard from "./components/merchant/CreateGiftCard";
 
 function App() {
     return (
@@ -21,7 +22,8 @@ function App() {
                 <Route exact path="/register" element={<Register />}></Route>
                 <Route exact path="/login" element={<Login />}></Route>
                 {localStorage.getItem('token')} && <Route exact path="/dashboard" element={<Dashboard />}></Route>
-                {localStorage.getItem('token')} && <Route exact path="/giftcard" element={<Giftcard />}></Route>
+                {localStorage.getItem('token')} && <Route exact path="/giftcards" element={<Giftcards />}></Route>
+                {localStorage.getItem('token')} && <Route exact path="//new-gift-card" element={<CreateGiftCard />}></Route>
               </Routes>
                 </div>
               <Footer />
