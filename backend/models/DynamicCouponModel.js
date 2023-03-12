@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
-const Merchant = require(`${__dirname}/MerchantModel`);
 
-const GiftCardSchema = new mongoose.Schema({
+const DynamicCouponSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -15,14 +14,23 @@ const GiftCardSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    amount: {
+    threshhold: {
         type: Number,
         required: true,
         min: 0
     },
     expiration: {
         type: Date,
-        required: true
+        required: true,
+        default: Date.now
+    },
+    discount_value: {
+        type: Number,
+        default: 0,
+    },
+    discount_percent: {
+        type: Number,
+        default: 0,
     },
     redeemed: {
         type: Boolean,
@@ -34,4 +42,4 @@ const GiftCardSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('giftcards', GiftCardSchema);
+module.exports = mongoose.model('dynamiccoupons', DynamicCouponSchema);
