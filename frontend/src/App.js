@@ -9,6 +9,7 @@ import Login from "./components/auth/Login";
 import Dashboard from "./components/merchant/Dashboard";
 import Giftcards from "./components/merchant/GiftCards";
 import CreateGiftCard from "./components/merchant/CreateGiftCard";
+import StaticCoupon from "./components/merchant/StaticCoupon";
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
                 {localStorage.getItem('token')} && <Route exact path="/dashboard" element={<Dashboard />}></Route>
                 {localStorage.getItem('token')} && <Route exact path="/giftcards" element={<Giftcards />}></Route>
                 {localStorage.getItem('token')} && <Route exact path="//new-gift-card" element={<CreateGiftCard />}></Route>
+                {localStorage.getItem('token')} && <Route exact path="/static-coupons" element={<StaticCoupon />}></Route>
               </Routes>
                 </div>
               <Footer />

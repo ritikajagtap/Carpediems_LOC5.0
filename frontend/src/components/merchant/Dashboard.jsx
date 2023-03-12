@@ -7,7 +7,7 @@ const Dashboard = () => {
     const host = "http://localhost:5000";
 
     let navigate = useNavigate();
-    
+
     const [merchant, setMerchant] = useState({});
 
     // get merchant details
@@ -210,7 +210,7 @@ const Dashboard = () => {
                                 expiration date.
                             </p>
                             <Link
-                                to={`/login`}
+                                to={`/static-coupons`}
                                 className="mt-3 text-blue-400 inline-flex items-center"
                             >
                                 Static Coupons
