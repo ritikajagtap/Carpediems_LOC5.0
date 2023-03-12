@@ -28,7 +28,7 @@ const Navbar = () => {
                         <Link to='/' className={`mr-5 px-1 hover:text-white hover:cursor-pointer ${location.pathname==='/'? 'text-blue-500': ''}`}>Home</Link>
                         <Link to='#' className={`mr-5 px-1 hover:text-white hover:cursor-pointer ${location.pathname==='/mynotes'? 'text-blue-500': ''}`}>About</Link>
                         <Link to='#' className={`mr-5 px-1 hover:text-white hover:cursor-pointer ${location.pathname==='/mynotes'? 'text-blue-500': ''}`}>Services</Link>
-                        <Link to='#' className={`mr-5 px-1 hover:text-white hover:cursor-pointer ${location.pathname==='/mynotes'? 'text-blue-500': ''}`}>API</Link>
+                        <Link to='/api-reference' className={`mr-5 px-1 hover:text-white hover:cursor-pointer ${location.pathname==='/mynotes'? 'text-blue-500': ''}`}>API</Link>
                     </nav>
                     <button className="inline-flex items-center bg-gray-800 border-0 py-1 px-3 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0">
                         <Link to={!localStorage.getItem('token')? `/merchant-portal`: `/dashboard`}>Merchant Portal</Link>
