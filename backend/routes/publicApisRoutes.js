@@ -8,7 +8,7 @@ const fetchUser = require(`${__dirname}/../middlewares/fetchUser`);
 const router = express.Router();
 
 router.get('/verifygiftcard/:code', publicApis.verifyGiftCard);
-router.post('/redeemgiftcard/:code', publicApis.redeemGiftCard);
+router.patch('/redeemgiftcard/:code', publicApis.redeemGiftCard);
 
 router.get('/verifystaticcoupon/:code', publicApis.verifyStaticCoupon);
 router.patch('/redeemstaticcoupon/:code', publicApis.redeemStaticCoupon);
