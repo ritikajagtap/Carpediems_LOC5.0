@@ -21,7 +21,10 @@ exports.createGiftCard = async (req, res) => {
                 .status(400)
                 .json({ message: "Enter a valid amount!" });
         }
-        if(!expiration || expiration>Date.now){
+        const today = new Date();
+        const userDate = new Date(Date.parse(expiration));
+
+        if(!expiration || userDate<today){
             return res
                 .status(400)
                 .json({ message: "Enter a valid expiration date!" });
@@ -55,10 +58,30 @@ exports.createGiftCard = async (req, res) => {
     }
 }
 
+// GET /viewValidGiftCards
+exports.viewValidGiftCards = async (req, res) => {
+    try {
+        const date = new Date;
+        const viewValidGiftCards = await GiftCard.find({ merchantId: req.user.id, expiration: { $gt: date } });
+
+        // console.log(validStaticCoupons);
+        res.status(200).json({
+            status: 'success',
+            length: viewValidGiftCards.length,
+            data: {
+                viewValidGiftCards: viewValidGiftCards
+            }
+        });
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Internal server error");
+    }
+}
+
 // GET /viewallgiftcards
 exports.viewallgiftcards = async (req, res) => {
     try {
-        const code = req.params.code;
         // console.log(name);
         const giftCards = await GiftCard.find({merchantId: req.user.id});
         console.log(giftCards)
@@ -96,7 +119,6 @@ exports.deleteGiftCardByCode = async (req, res) => {
         }
         // console.log(giftCards.length)
         const giftCardDel = await GiftCard.findOneAndDelete({code: code}, {merchantId: req.user.id});
-        
         res.status(200).json({
             status: 'success',
             
