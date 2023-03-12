@@ -11,5 +11,8 @@ router.get('/verifygiftcard/:code', publicApis.verifyGiftCard);
 router.post('/redeemgiftcard/:code', publicApis.redeemGiftCard);
 
 router.get('/verifystaticcoupon/:code', publicApis.verifyStaticCoupon);
+router.patch('/redeemstaticcoupon/:code', publicApis.redeemStaticCoupon);
 
+router.get('/verifydynamiccoupon/:code', publicApis.verifyDynamicCoupon);
+router.patch('/redeemdynamiccoupon/:code', publicApis.redeemDynamicCoupon);
 module.exports = router;
